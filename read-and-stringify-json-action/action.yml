@@ -5,6 +5,14 @@ inputs:
   file:
     description: 'Path to the JSON file'
     required: true
+  root_json_key:
+    description: 'Root JSON key to be inserted when outputting'
+    required: false
+    default: ''
+  include_current_repo:
+    description: 'Include current repository in the JSON data'
+    required: false
+    default: "false"
 outputs:
   properties:
     description: 'Stringified JSON data'
