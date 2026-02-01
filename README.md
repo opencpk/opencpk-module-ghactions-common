@@ -1,6 +1,6 @@
 # Project Name
 
-opencepk-module-ghactions-common
+opencpk-module-ghactions-common
 
 ## Description
 
@@ -8,10 +8,13 @@ Git Custom action to create a PR and check the blockage
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Project Name](#project-name)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Installation
 
@@ -37,7 +40,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: create PR
-        uses: opencepk/opencepk-module-ghactions-common/set-upstream-create-pr@v0.0.1
+        uses: opencpk/opencpk-module-ghactions-common/set-upstream-create-pr@v0.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           excluded-repos: "anythingInFuture/repo-to-exclude"
@@ -51,7 +54,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: Check for PR Blockage
-        uses: opencepk/opencepk-module-ghactions-common/set-upstream-check-pr-block@v0.0.1
+        uses: opencpk/opencpk-module-ghactions-common/set-upstream-check-pr-block@v0.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
