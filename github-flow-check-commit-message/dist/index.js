@@ -32328,8 +32328,6 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
 const github = __nccwpck_require__(5438);
-const path = __nccwpck_require__(1017);
-const fs = (__nccwpck_require__(7147).promises);
 
 async function run() {
   try {
@@ -32347,69 +32345,16 @@ async function run() {
       },
     };
     const baseRef = github.context.payload.pull_request.base.ref;
-    const repoOwner = github.context.repo.owner;
-    core.info(`repoOwner is: ${repoOwner}`);
-    let upstreamRepo = '';
-    // Check if .github/UPSTREAM file exists and read its content
-    const upstreamFilePath = path.join('.github', 'UPSTREAM');
-    try {
-      const upstreamFileContent = await fs.readFile(upstreamFilePath, 'utf8');
-      const lines = upstreamFileContent.split('\n').filter(Boolean);
-      if (lines.length > 0) {
-        upstreamRepo = lines[0];
-        core.info(`Using upstream repo from .github/UPSTREAM: ${upstreamRepo}`);
-      } else {
-        throw new Error('.github/UPSTREAM file is empty');
-      }
-    } catch (err) {
-      // If the file does not exist or is empty, fall back to the existing logic
-      core.warning(
-        `Error reading .github/UPSTREAM file: ${JSON.stringify(err)}`,
-      );
-      if (err.code === 'ENOENT') {
-        core.info('.github/UPSTREAM file does not exist, using default logic');
-      } else {
-        core.warning(`Error reading .github/UPSTREAM file: ${err.message}`);
-      }
-
-      if (repoOwner === 'opencepk') {
-        upstreamRepo = `git@github.com:${repoOwner}/opencepk-template-base.git`;
-      } else {
-        upstreamRepo = `git@github.com:${repoOwner}/mirror-opencepk-template-base.git`;
-      }
-    }
 
     // Fetch the latest changes from the origin repository
     await exec.exec('git', ['fetch', 'origin']);
 
-    // Check if the upstream remote is set
-    let upstreamExists = false;
-    await exec.exec('git', ['remote'], {
-      listeners: {
-        stdout: data => {
-          upstreamExists = data.toString().includes('upstream');
-        },
-      },
-    });
-
-    // If upstream remote is not set, add it
-    if (!upstreamExists) {
-      await exec.exec('git', ['remote', 'add', 'upstream', upstreamRepo]);
-    }
-
-    // Fetch the latest changes from the upstream repository
-    await exec.exec('git', ['fetch', 'upstream']);
-
-    // Get the list of commits that are unique to the current branch compared to the upstream base branch
-    await exec.exec(
-      'git',
-      ['rev-list', `HEAD`, `^upstream/${baseRef}`],
-      options,
-    );
+    // Get the list of commits that are unique to the current branch compared to the origin base branch
+    await exec.exec('git', ['rev-list', `HEAD`, `^origin/${baseRef}`], options);
     const hashesArray = commitHashes.split('\n').filter(Boolean);
     // Get the list of commits from the base repository
     let baseCommitHashes = '';
-    await exec.exec('git', ['rev-list', `upstream/${baseRef}`], {
+    await exec.exec('git', ['rev-list', `origin/${baseRef}`], {
       listeners: {
         stdout: data => {
           baseCommitHashes += data.toString();
