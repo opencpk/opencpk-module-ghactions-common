@@ -32345,37 +32345,6 @@ async function run() {
       },
     };
     const baseRef = github.context.payload.pull_request.base.ref;
-    const repoOwner = github.context.repo.owner;
-    core.info(`repoOwner is: ${repoOwner}`);
-    let upstreamRepo = '';
-    // Check if .github/UPSTREAM file exists and read its content
-    const upstreamFilePath = path.join('.github', 'UPSTREAM');
-    try {
-      const upstreamFileContent = await fs.readFile(upstreamFilePath, 'utf8');
-      const lines = upstreamFileContent.split('\n').filter(Boolean);
-      if (lines.length > 0) {
-        upstreamRepo = lines[0];
-        core.info(`Using upstream repo from .github/UPSTREAM: ${upstreamRepo}`);
-      } else {
-        throw new Error('.github/UPSTREAM file is empty');
-      }
-    } catch (err) {
-      // If the file does not exist or is empty, fall back to the existing logic
-      core.warning(
-        `Error reading .github/UPSTREAM file: ${JSON.stringify(err)}`,
-      );
-      if (err.code === 'ENOENT') {
-        core.info('.github/UPSTREAM file does not exist, using default logic');
-      } else {
-        core.warning(`Error reading .github/UPSTREAM file: ${err.message}`);
-      }
-
-      if (repoOwner === 'opencpk') {
-        upstreamRepo = `git@github.com:${repoOwner}/opencpk-template-base.git`;
-      } else {
-        upstreamRepo = `git@github.com:${repoOwner}/mirror-opencpk-template-base.git`;
-      }
-    }
 
     // Fetch the latest changes from the origin repository
     await exec.exec('git', ['fetch', 'origin']);
