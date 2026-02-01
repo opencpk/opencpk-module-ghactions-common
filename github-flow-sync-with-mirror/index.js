@@ -160,7 +160,7 @@ async function run() {
           [
             'commit',
             '-m',
-            'chores/update: Replace opencepk with internal repo owner in .pre-commit-config.yaml',
+            'chores/update: Replace opencpk with internal repo owner in .pre-commit-config.yaml',
           ],
           commitOptions,
         );

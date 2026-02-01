@@ -61091,7 +61091,7 @@ async function run() {
       return;
     }
 
-    if (repoName.includes('cepk-template')) {
+    if (repoName.includes('cpk-template')) {
       logger.info(`Skipping as the repo is a template`);
       return;
     }
@@ -61170,7 +61170,7 @@ async function run() {
       `Total number of repositories in the organization: ${repos.length}`,
     );
 
-    // Filter repositories that match any of the patterns and start with "cepk"
+    // Filter repositories that match any of the patterns and start with "cpk"
     const matchingRepos = repos.filter(
       repo =>
         patterns.some(pattern => repo.name.includes(pattern)) &&

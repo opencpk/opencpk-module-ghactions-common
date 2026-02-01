@@ -4,9 +4,9 @@ const { execSync } = require('child_process');
 const logger = require('./logger.js');
 
 function replaceContentAndCommit(org = null) {
-  // Replace all occurrences of opencepk/opencepk-module-ghactions-common with in .github/workflows/*.yml
+  // Replace all occurrences of opencpk/opencpk-module-ghactions-common with in .github/workflows/*.yml
   logger.info(
-    `Replacing opencepk/opencepk-module-ghactions-common in .github/workflows/*.yml in the following org ${org}`,
+    `Replacing opencpk/opencpk-module-ghactions-common in .github/workflows/*.yml in the following org ${org}`,
   );
   const workflowDir = path.join('.github', 'workflows');
   const files = fs.readdirSync(workflowDir);
@@ -15,17 +15,17 @@ function replaceContentAndCommit(org = null) {
     if (filePath.endsWith('.yml') || filePath.endsWith('.yaml')) {
       let content = fs.readFileSync(filePath, 'utf8');
       logger.info(
-        `Replacing content from opencepk/opencepk-module-ghactions-common to ${org}/mirror-opencepk-module-ghactions-common in ${filePath}`,
+        `Replacing content from opencpk/opencpk-module-ghactions-common to ${org}/mirror-opencpk-module-ghactions-common in ${filePath}`,
       );
       content = content.replace(
-        /opencepk\/opencepk-module-ghactions-common/g,
-        `${org}/mirror-opencepk-module-ghactions-common`,
+        /opencpk\/opencpk-module-ghactions-common/g,
+        `${org}/mirror-opencpk-module-ghactions-common`,
       );
       logger.info(
-        `Replacing content from opencepk/opencepk-projects-hub to ${org}/cep-projects-hub in ${filePath}`,
+        `Replacing content from opencpk/opencpk-projects-hub to ${org}/cep-projects-hub in ${filePath}`,
       );
       content = content.replace(
-        /repo: 'opencepk\/opencepk-projects-hub'/g,
+        /repo: 'opencpk\/opencpk-projects-hub'/g,
         `repo: '${org}/cep-projects-hub'`,
       );
       fs.writeFileSync(filePath, content);
@@ -37,7 +37,7 @@ function replaceContentAndCommit(org = null) {
   execSync('git add .github/workflows');
   try {
     execSync(
-      'git commit -m "chores/cleanup: Replace opencepk with internal repo owner in workflow files"',
+      'git commit -m "chores/cleanup: Replace opencpk with internal repo owner in workflow files"',
     );
   } catch (error) {
     if (error.message.includes('nothing to commit')) {
@@ -49,13 +49,13 @@ function replaceContentAndCommit(org = null) {
     }
   }
 
-  // Replace all occurrences of git@github.com:opencepk with git@github.com:{{internal repo owner}} in .pre-commit-config.yaml
-  logger.info('Replacing git@github.com:opencepk in .pre-commit-config.yaml');
+  // Replace all occurrences of git@github.com:opencpk with git@github.com:{{internal repo owner}} in .pre-commit-config.yaml
+  logger.info('Replacing git@github.com:opencpk in .pre-commit-config.yaml');
   const preCommitConfigPath = '.pre-commit-config.yaml';
   if (fs.existsSync(preCommitConfigPath)) {
     let preCommitContent = fs.readFileSync(preCommitConfigPath, 'utf8');
     preCommitContent = preCommitContent.replace(
-      /git@github.com:opencepk\/(opencepk-.*?)\.git/g,
+      /git@github.com:opencpk\/(opencpk-.*?)\.git/g,
       `git@github.com:${org}/mirror-$1.git`,
     );
     fs.writeFileSync(preCommitConfigPath, preCommitContent);
@@ -68,7 +68,7 @@ function replaceContentAndCommit(org = null) {
     try {
       logger.info('Committing changes to .pre-commit-config.yaml');
       execSync(
-        'git commit -m "chores/update: Replace org opencepk in .pre-commit-config.yaml"',
+        'git commit -m "chores/update: Replace org opencpk in .pre-commit-config.yaml"',
       );
     } catch (error) {
       logger.warn(`${JSON.stringify(error)}`);
